@@ -1,0 +1,176 @@
+using System;
+
+namespace EntryPoint
+{
+    class EntryPoint
+    {
+        static void Main()
+        {
+            Random rnd = new Random();
+            bool end = false;
+            int pHealth = 100;
+            int eHealth = 100;
+            int skipTurn = 0;
+            int attack = 0;
+
+
+                
+                end = false;
+                do
+                {
+
+                    ColorBackAndLine(ConsoleColor.Black, ConsoleColor.White); //Fist is background color then text color
+
+                    //++++++++++++++++++++++++++++++++++++++++++++++++++//
+                    if (skipTurn > 0)
+                    {
+                        skipTurn--;
+                        Console.WriteLine("PLAYER RECHARGING AFTER HEAVY ATTACK! \n");
+                    }
+                    else if (skipTurn == 0)
+                    {
+                        ColorBackAndLine(ConsoleColor.Black, ConsoleColor.Green);
+                        Console.WriteLine("1. Basic Attack\n2. Magic Attack\n3. Heavy attack (Recharge Time: 1 Turn)\n4. Flee");
+                        Console.Write("What do you want to do? ");
+                        string option = Console.ReadLine();
+                        attack = int.Parse(option);
+                        Console.WriteLine("\n");
+
+                        ColorBackAndLine(ConsoleColor.DarkBlue, ConsoleColor.Yellow); //Player colors
+                        if (attack != 4)
+                        {
+                            eHealth -= PlayerAttack(attack);
+                        }
+
+                        Console.WriteLine("Enemy health = " + eHealth + "\n");
+
+                        if (attack == 3)
+                        {
+                            skipTurn = 1;
+                            attack = 0;
+                        }
+
+                        if (attack == 4)
+                        {
+                            if (PlayerAttack(attack) < 7)
+                            {
+                                Console.WriteLine("You were un-able to flee from the enemy! \n");
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("You ran away from the enemy!");
+                                end = true;
+                            }
+                        }
+
+                    }
+                    //++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+                    ColorBackAndLine(ConsoleColor.Black, ConsoleColor.White);
+
+                    //++++++++++++++++++++++++++++++++++++++++++++++++++//
+                    ColorBackAndLine(ConsoleColor.DarkGray, ConsoleColor.White); //Enmy Colors
+                    if (end == false)
+                    {
+                        attack = rnd.Next(1, 3);
+                        pHealth -= EnemyAttack(attack);
+                        Console.WriteLine("Player health = " + pHealth + "\n");
+                    }
+
+                    //++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+                    ColorBackAndLine(ConsoleColor.Black, ConsoleColor.White);
+
+                    //++++++++++++++++++++++++++++++++++++++++++++++++++//
+                    if (pHealth <= 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("YOU DIED!");
+                        end = true;
+                    }
+                    else if (eHealth <= 0)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("YOU WIN!");
+                        end = true;
+                    }
+                    //++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+                } while (end == false);
+
+            Console.WriteLine("\nTHANKS FOR PLAYING!");    
+
+            }
+
+        static int PlayerAttack(int attackNumber)
+        {
+            Random rnd = new Random();
+            int AtkDmg;
+            int sum = 0;
+
+            switch (attackNumber)
+            {
+                case 1:
+                     AtkDmg = rnd.Next(2, 5);
+                        sum = AtkDmg;
+                        Console.Write("You attacked the enemy with a basic attack and hit for " + sum + " points! \n");
+                    break;
+                case 2:
+                    AtkDmg = rnd.Next(6, 9);
+                        sum = AtkDmg;
+                        Console.Write("You attacked the enemy with a magic attack and hit for " + sum + " points! \n");
+                    break;
+                case 3:
+                    AtkDmg = rnd.Next(10, 12);
+                        sum = AtkDmg;
+                        Console.Write("You attacked the enemy with a heavy attack and hit for " + sum + " points! \n");
+                    break;
+                case 4:
+                    sum = rnd.Next(0, 10);
+                    break;
+                default:
+                    Console.WriteLine("You stumble and end up falling causing you to lose your chance to attack!");
+                    break;
+            }
+            return sum;
+        }
+
+        static int EnemyAttack(int attackNumber)
+        {
+            Random rnd = new Random();
+            int AtkDmg;
+            int sum = 0;
+
+            switch (attackNumber)
+            {
+                case 1:
+                    AtkDmg = rnd.Next(2, 5);
+                    sum = AtkDmg;
+                    Console.Write("You are attacked by the enemy with a basic attack and were hit for " + sum + " points! \n");
+                    break;
+                case 2:
+                    AtkDmg = rnd.Next(6, 9);
+                    sum = AtkDmg;
+                    Console.Write("You are attacked by the enemy with a magic attack and were hit for " + sum + " points! \n");
+                    break;
+                case 3:
+                    AtkDmg = rnd.Next(10, 12);
+                    sum = AtkDmg;
+                    Console.Write("You are attacked by the enemy with a heavy attack and were hit for " + sum + " points! \n");
+                    break;
+                default:
+                    break;
+            }
+            return sum;
+        }
+
+        static void ColorBackAndLine(ConsoleColor color, ConsoleColor color2)
+        {
+            Console.ForegroundColor = color2;
+            Console.BackgroundColor = color;
+        }
+
+    }
+
+}
